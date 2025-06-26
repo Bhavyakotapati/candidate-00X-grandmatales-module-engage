@@ -7,7 +7,6 @@ export default function Home() {
         <li><a href="/terms">Terms</a></li>
         <li><a href="/faq">FAQ</a></li>
         <li><a href="/optout">Opt-Out</a></li>
-        <li><a href="/engage">Post-Purchase Engagement</a></li>
       </ul>
     </main>
   );
