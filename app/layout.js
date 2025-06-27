@@ -1,7 +1,6 @@
-// app/layout.js
 export const metadata = {
-  title: "Grandmatales",
-  description: "Grandmatales app",
+  title: 'Grandmatales',
+  description: 'Grandmatales App',
 };
 
 export default function RootLayout({ children }) {
