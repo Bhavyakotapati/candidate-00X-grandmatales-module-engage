@@ -1,72 +1,59 @@
 'use client';
 import { useState } from 'react';
 
-export default function OptionalEngagement() {
-  const [selected, setSelected] = useState(null);
-  const [story, setStory] = useState('');
-  const [prize, setPrize] = useState('');
+export default function RaffleFeedback() {
+  const [selection, setSelection] = useState('');
+  const [form, setForm] = useState({ story: '', prize: '' });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const res = await fetch('/api/raffle-feedback', {
+  const handleSubmit = async () => {
+    await fetch('/api/raffle-feedback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ story, prize }),
+      body: JSON.stringify(form),
     });
-
-    if (res.ok) {
-      setSubmitted(true);
-    } else {
-      alert('Failed to submit.');
-    }
+    setSubmitted(true);
   };
 
-  return (
-    <main style={{ padding: '2rem' }}>
-      <h1>Optional Engagement</h1>
+  if (submitted) {
+    return <p>Thank you for participating!</p>;
+  }
 
-      {!selected && (
+  return (
+    <div>
+      <h1>Optional Engagement</h1>
+      <p>Would you like to participate in this optional activity?</p>
+      {!selection && (
         <>
-          <p>Would you like to participate in this optional activity?</p>
-          <button onClick={() => setSelected('yes')}>Yes, I want to participate</button>
-          <button onClick={() => setSelected('no')} style={{ marginLeft: '1rem' }}>
-            No, thanks
-          </button>
+          <button onClick={() => setSelection('yes')}>Yes, I want to participate</button>
+          <button onClick={() => setSelection('no')}>No, thanks</button>
         </>
       )}
-
-      {selected === 'no' && <p>You selected: No — Thank you for your time!</p>}
-
-      {selected === 'yes' && !submitted && (
-        <form onSubmit={handleSubmit} style={{ marginTop: '2rem' }}>
-          <p>You selected: Yes</p>
-          <div style={{ marginBottom: '1rem' }}>
-            <label>My favourite bedtime story is…</label><br />
+      {selection === 'no' && <p>You selected: no</p>}
+      {selection === 'yes' && (
+        <div>
+          <p>You selected: yes</p>
+          <label>
+            My favourite bedtime story is:
             <input
               type="text"
-              value={story}
-              onChange={(e) => setStory(e.target.value)}
-              required
-              style={{ width: '100%', padding: '0.5rem' }}
+              value={form.story}
+              onChange={(e) => setForm({ ...form, story: e.target.value })}
             />
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label>Suggest a prize you’d love to win</label><br />
+          </label>
+          <br />
+          <label>
+            Suggest a prize you'd love to win:
             <input
               type="text"
-              value={prize}
-              onChange={(e) => setPrize(e.target.value)}
-              required
-              style={{ width: '100%', padding: '0.5rem' }}
+              value={form.prize}
+              onChange={(e) => setForm({ ...form, prize: e.target.value })}
             />
-          </div>
-          <button type="submit">Submit</button>
-        </form>
+          </label>
+          <br />
+          <button onClick={handleSubmit}>Submit</button>
+        </div>
       )}
-
-      {submitted && <p>🎉 Thank you for your feedback!</p>}
-    </main>
+    </div>
   );
 }

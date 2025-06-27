@@ -1,12 +1,10 @@
-export async function POST(request) {
-  const { story, prize } = await request.json();
+export async function POST(req) {
+  const body = await req.json();
 
-  console.log("🎯 Feedback received:");
-  console.log("Story:", story);
-  console.log("Prize:", prize);
+  console.log("Received feedback:", body);
 
-  return new Response(
-    JSON.stringify({ message: 'Feedback saved successfully' }),
-    { status: 200, headers: { 'Content-Type': 'application/json' } }
-  );
+  return new Response(JSON.stringify({ message: "Feedback received!" }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 }
